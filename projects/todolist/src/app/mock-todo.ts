@@ -1,4 +1,5 @@
 import { Todo } from "./todos";  // Assurez-vous d'utiliser les guillemets simples ou doubles autour du chemin
+import { TodoListComponent } from "./todo-list/todo-list.component";
 
 export const TODOS: Todo[] = [
     {
