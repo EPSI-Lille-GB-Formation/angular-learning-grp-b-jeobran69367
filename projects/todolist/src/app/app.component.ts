@@ -9,10 +9,9 @@ import { TodoListComponent } from './todo-list/todo-list.component';
   standalone: true,
   imports: [CommonModule, RouterOutlet,TodoListComponent],  // Correction de l'import pour RouterOutlet
   template: `
-    <div class ="container">
-      <todo list />
+    <div>  
+      <router-outlet></router-outlet>
     </div>
-
   `,
     styles: [],
 })

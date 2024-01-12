@@ -1,28 +1,74 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TODOS } from '../mock-todo';
+import { Component, NgModule } from '@angular/core';
+import { TodoComponent } from '../todo/todo.component';
+import { TodoService } from '../todo.service';
+import { Todo } from '../todo';
 
 @Component({
   selector: 'todo-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TodoComponent],
   template: `
+    <h1>Liste des choses à faire :</h1>
 
-  
+    <a
+      href="#"
+      role="button"
+      [class.secondary]="!completedFilter && !completedAll"
+      (click)="onClickTodo()"
+      >A faire</a
+    >
+    <a
+      href="#"
+      role="button"
+      [class.secondary]="completedFilter && !completedAll"
+      (click)="onClickTodoCompleted()"
+      >Terminée</a
+    >
 
-    <h1> Liste des choses à faire :</h1>
+    <a
+      href="#"
+      role="button"
+      [class.secondary]="completedAll"
+      (click)="onClickAll()"
+      >Afficher tout</a
+    >
 
-    <ul>
-      <ng-container *ngFor="Let todo of todoList">
-        <li *ngIf="!todo.isCompleted">{{ todo.title}}</li>
-      </ng-container>
-    </ul>
-
-
+    <ng-container *ngFor="let todo of todoList">
+      <todo
+        *ngIf="todo.isCompleted === completedFilter || completedAll"
+        [value]="todo"
+      />
+    </ng-container>
   `,
-  styleUrls: ['./todo-list.component.css'] // Correction de la propriété 'styleUrl' à 'styleUrls'
+  styles: [],
 })
-
 export class TodoListComponent {
-  todoList = TODOS
+  todoList: Todo[] = [];
+
+  completedFilter: boolean = false;
+  completedAll: boolean = false;
+
+  constructor(private todoService: TodoService) {}
+
+  ngOnInit(): void {
+    this.todoService
+      .getTodoList()
+      .subscribe((todos) => (this.todoList = todos));
+    this.todoService.getTodoById(5).subscribe((todo) => console.log(todo));
+  }
+
+  onClickTodo(): void {
+    this.completedAll = false;
+    this.completedFilter = false;
+  }
+
+  onClickTodoCompleted(): void {
+    this.completedAll = false;
+    this.completedFilter = true;
+  }
+
+  onClickAll(): void {
+    this.completedAll = true;
+  }
 }

@@ -6,7 +6,7 @@ export class Todo {
         public title: string,
         public content: string,
         public author: string,
-        public isComplete: boolean,
+        public isCompleted: boolean,
         public completedAt: Date | null,
     ) {
         this.createdAt = new Date();
